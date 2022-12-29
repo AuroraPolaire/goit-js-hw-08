@@ -1,47 +1,41 @@
 import _ from 'lodash';
+const localStorageKey = 'feedback-form-state';
 
 const form = document.querySelector('.feedback-form');
-const inputValues = {};
-
-function fillFormFields() {
-  try {
-    const data = localStorage.getItem('feedback-form-state');
-    const parsedData = JSON.parse(data);
-
-    if (parsedData === null) {
-      return;
-    }
-
-    for (const item in parsedData) {
-      form.elements[item].value = parsedData[item];
-    }
-  } catch (error) {
-    console.log(parsedData);
-  }
-}
+let inputValues = {};
 
 fillFormFields();
 
-function onInputValueGet({ target }) {
-  inputValues[target.name] = target.value;
-
-  localStorage.setItem('feedback-form-state', JSON.stringify(inputValues));
-}
-
-function onSubmitDataSend(event) {
-  event.preventDefault();
-  const formEl = event.currentTarget.elements;
-  const email = formEl.email.value;
-  const message = formEl.message.value;
-
-  if (email !== '' && message !== '') {
-    console.log({
-      email,
-      message,
-    });
-    form.reset();
+function fillFormFields() {
+  try {
+    let data = localStorage.getItem(localStorageKey);
+    if (data) {
+      data = JSON.parse(data);
+      Object.entries(data).forEach(([name, value]) => {
+        form.elements[name].value = value;
+      });
+    }
+  } catch (error) {
+    console.log(`error`);
   }
 }
 
+function onInputValueGet({ target }) {
+  inputValues = localStorage.getItem(localStorageKey);
+  inputValues = inputValues ? JSON.parse(inputValues) : {};
+  inputValues[target.name] = target.value;
+
+  localStorage.setItem(localStorageKey, JSON.stringify(inputValues));
+}
+
 form.addEventListener('input', _.throttle(onInputValueGet, 500));
-form.addEventListener('submit', onSubmitDataSend);
+form.addEventListener('submit', event => {
+  event.preventDefault();
+  const data = new FormData(form);
+  data.forEach((value, name) => console.log(name, value));
+  form.reset();
+});
+
+form.addEventListener('reset', () => {
+  localStorage.removeItem(localStorageKey);
+});
