@@ -2,7 +2,6 @@ import _ from 'lodash';
 const localStorageKey = 'feedback-form-state';
 
 const form = document.querySelector('.feedback-form');
-let inputValues = {};
 
 fillFormFields();
 
@@ -21,7 +20,7 @@ function fillFormFields() {
 }
 
 function onInputValueGet({ target }) {
-  inputValues = localStorage.getItem(localStorageKey);
+  let inputValues = localStorage.getItem(localStorageKey);
   inputValues = inputValues ? JSON.parse(inputValues) : {};
   inputValues[target.name] = target.value;
 
