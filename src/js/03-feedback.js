@@ -1,6 +1,5 @@
 import _ from 'lodash';
 const localStorageKey = 'feedback-form-state';
-
 const form = document.querySelector('.feedback-form');
 
 fillFormFields();
