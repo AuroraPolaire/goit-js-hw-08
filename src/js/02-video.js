@@ -15,17 +15,9 @@ try {
   const lastUsersTime = localStorage.getItem('videoplayer-current-time');
   const parsedLastUsersTime = JSON.parse(lastUsersTime);
 
-  player
-    .setCurrentTime(parsedLastUsersTime)
-    .then(function (seconds) {})
-    .catch(function (error) {
-      switch (error.name) {
-        case 'RangeError':
-          break;
-        default:
-          break;
-      }
-    });
+  if (parsedLastUsersTime) {
+    player.setCurrentTime(parsedLastUsersTime);
+  }
 } catch (error) {
   console.log(parsedUsersTime);
 }
