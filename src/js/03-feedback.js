@@ -30,8 +30,17 @@ function onInputValueGet({ target }) {
 
 function onSubmitDataSend(event) {
   event.preventDefault();
-  console.log(inputValues);
-  form.reset();
+  const formEl = event.currentTarget.elements;
+  const email = formEl.email.value;
+  const message = formEl.message.value;
+
+  if (email !== '' && message !== '') {
+    console.log({
+      email,
+      message,
+    });
+    form.reset();
+  }
 }
 
 form.addEventListener('input', _.throttle(onInputValueGet, 500));
